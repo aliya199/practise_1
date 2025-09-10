@@ -1,0 +1,37 @@
+package com.bookstore.registration;
+
+import java.io.IOException;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+public class BookstoreRegistrationServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String fullname = request.getParameter("fullname");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
+
+        response.setContentType("text/html");
+        ServletOutputStream out = response.getOutputStream();
+
+        // Simple validation
+        if (fullname == null || fullname.isEmpty() ||
+            email == null || email.isEmpty() ||
+            password == null || password.isEmpty() ||
+            !password.equals(confirmPassword)) {
+            out.println("<html><body>");
+            out.println("<h2>Registration Failed</h2>");
+            out.println("<p>Please fill all fields and ensure passwords match.</p>");
+            out.println("<a href='registration.html'>Back to Registration</a>");
+            out.println("</body></html>");
+            return;
+        }
+
+        // You would typically save the user data to a database here
+        out.println("<html><body>");
+        out.println("<h2>Registration Successful!</h2>");
+        out.println("<p>Welcome to the Bookstore, " + fullname + "!</p>");
+        out.println("</body></html>");
+    }
+}
