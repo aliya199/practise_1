@@ -1,0 +1,71 @@
+import java.io.*;
+import java.util.*;
+
+class WalkSession implements Serializable {
+    private String date;
+    private double distanceKm;
+    private int durationMinutes;
+    private int steps;
+
+    public WalkSession(String date, double distanceKm, int durationMinutes, int steps) {
+        this.date = date;
+        this.distanceKm = distanceKm;
+        this.durationMinutes = durationMinutes;
+        this.steps = steps;
+    }
+
+    public String getDate() { return date; }
+    public double getDistanceKm() { return distanceKm; }
+    public int getDurationMinutes() { return durationMinutes; }
+    public int getSteps() { return steps; }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "Date: %s, Distance: %.2f km, Duration: %d min, Steps: %d",
+            date, distanceKm, durationMinutes, steps
+        );
+    }
+}
+
+public class WalkingTracker {
+    private static final String DATA_FILE = "walking_data.ser";
+    private List<WalkSession> sessions;
+
+    public WalkingTracker() {
+        sessions = loadSessions();
+    }
+
+    public void addSession(WalkSession session) {
+        sessions.add(session);
+        saveSessions();
+    }
+
+    public void showHistory() {
+        if (sessions.isEmpty()) {
+            System.out.println("No sessions found.");
+        } else {
+            for (WalkSession session : sessions) {
+                System.out.println(session);
+            }
+        }
+    }
+
+    public void showSummary() {
+        if (sessions.isEmpty()) {
+            System.out.println("No sessions to summarize.");
+            return;
+        }
+        double totalDistance = 0;
+        int totalDuration = 0, totalSteps = 0;
+        for (WalkSession s : sessions) {
+            totalDistance += s.getDistanceKm();
+            totalDuration += s.getDurationMinutes();
+            totalSteps += s.getSteps();
+        }
+        System.out.printf("Total walks: %d\n", sessions.size());
+        System.out.printf("Total distance: %.2f km\n", totalDistance);
+        System.out.printf("Total duration: %d min\n", totalDuration);
+        System.out.printf("Total steps: %d\n", totalSteps);
+        System.out.printf("Average speed: %.2f km/h\n",
+            (totalDuration == 0) ? 0 : (total
